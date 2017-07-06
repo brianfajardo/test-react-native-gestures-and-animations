@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { PanResponder, Animated } from 'react-native'
+import { View, PanResponder, Animated } from 'react-native'
 import PropTypes from 'prop-types'
 
 class Deck extends Component {
@@ -11,9 +11,7 @@ class Deck extends Component {
       // Return true ~> this PanResponder is responsible for event.
       // Return false ~> this PanResponder is not responsible for event.
       onStartShouldSetPanResponder: () => true,
-      onPanResponderMove: (e, gesture) => {
-        position.setValue({ x: gesture.dx, y: gesture.dy })
-      },
+      onPanResponderMove: (e, gesture) => position.setValue({ x: gesture.dx, y: gesture.dy }),
       onPanResponderRelease: () => { }
     })
     this.state = { position, panResponder }
@@ -21,18 +19,24 @@ class Deck extends Component {
 
   renderCards() {
     const { data, renderCard } = this.props
-    return data.map(item => renderCard(item))
+    const { position, panResponder } = this.state
+    return data.map((item, index) =>
+      index === 0 ?
+        <Animated.View
+          style={position.getLayout()}
+          {...panResponder.panHandlers}
+        >
+          {renderCard(item)}
+        </Animated.View>
+        : renderCard(item)
+    )
   }
 
   render() {
     return (
-      // Spreading panHandlers callbacks into View
-      <Animated.View
-        style={this.state.position.getLayout()}
-        {...this.state.panResponder.panHandlers}
-      >
+      <View>
         {this.renderCards()}
-      </Animated.View>
+      </View>
     )
   }
 }
