@@ -2,9 +2,17 @@ import React, { Component } from 'react'
 import { View, Animated } from 'react-native'
 
 class Deck extends Component {
+
+  renderCards() {
+    const { data, renderCard } = this.props
+    return data.map(item => renderCard(item))
+  }
+
   render() {
     return (
-      <View />
+      <View>
+        {this.renderCards()}
+      </View>
     )
   }
 }
