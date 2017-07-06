@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { View, Animated } from 'react-native'
+import PropTypes from 'prop-types'
 
 class Deck extends Component {
 
@@ -15,6 +16,15 @@ class Deck extends Component {
       </View>
     )
   }
+}
+
+Deck.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    text: PropTypes.string,
+    uri: PropTypes.string
+  })).isRequired,
+  renderCard: PropTypes.func.isRequired
 }
 
 export default Deck
