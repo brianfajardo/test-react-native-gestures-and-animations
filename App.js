@@ -1,6 +1,32 @@
-import React from 'react'
-import { Text } from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import DUMMY_DATA from './src/constants/data'
 
-const App = () => <Text>Up and running on Expo!⚡️</Text>
+import Deck from './src/components/Deck'
+
+class App extends Component {
+
+  renderCard(item) {
+    return <Text>{item.text}</Text>
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Deck
+          data={DUMMY_DATA}
+          renderCard={this.renderCard}
+        />
+      </View>
+    )
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+})
 
 export default App
