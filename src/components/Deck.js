@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import { View, PanResponder, Animated, Dimensions } from 'react-native'
 import PropTypes from 'prop-types'
 
+// Dynamically setting input range to best match width of user device
+const SCREEN_WIDTH = Dimensions.get('window').width
+const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.25
+
 class Deck extends Component {
 
   constructor() {
@@ -12,15 +16,22 @@ class Deck extends Component {
       // Return false ~> this PanResponder is not responsible for event.
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (e, gesture) => position.setValue({ x: gesture.dx, y: gesture.dy }),
-      onPanResponderRelease: () => this.resetCardPosition()
+      onPanResponderRelease: (e, gesture) => {
+        if (gesture.dx > SWIPE_THRESHOLD) {
+          console.log('swipe right')
+        } else if (gesture.dx < -SWIPE_THRESHOLD) {
+          console.log('swipe left')
+        } else {
+          // User does not hit above thresholds, reset cards position.
+          this.resetCardPosition()
+        }
+      }
     })
     this.state = { position, panResponder }
   }
 
   rotateCard() {
     const { position } = this.state
-    // Dynamically setting input range to best match width of user device
-    const SCREEN_WIDTH = Dimensions.get('window').width
     // Interpolating x amount of pixel drag (inputRange)
     // to degrees of rotation (outputRange)
     const rotate = position.x.interpolate({
@@ -35,6 +46,10 @@ class Deck extends Component {
     }
   }
 
+  swipeThreshold() {
+
+  }
+
   resetCardPosition() {
     Animated.spring(this.state.position, {
       toValue: { x: 0, y: 0 }
@@ -43,7 +58,6 @@ class Deck extends Component {
 
   renderCards() {
     const { data, renderCard } = this.props
-    console.log('data:', data)
     return data.map((photo, index) =>
       index === 0 ?
         <Animated.View
@@ -67,7 +81,10 @@ class Deck extends Component {
 }
 
 Deck.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  data: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array
+  ]).isRequired,
   renderCard: PropTypes.func.isRequired
 }
 

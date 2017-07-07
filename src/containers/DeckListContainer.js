@@ -19,17 +19,16 @@ class DeckListContainer extends Component {
       user: { name, location },
       urls: { small }
     } = photo
-    const { title, description } = styles
+    const { author, description } = styles
     return (
       <Card image={{ uri: small }} key={id}>
-        <Text style={title}>{name}</Text>
+        <Text style={author}>{name}</Text>
         <Text style={description}>{location}</Text>
       </Card>
     )
   }
 
   render() {
-    console.log('this.props.photos', this.props.photos)
     return (
       <View style={styles.container}>
         <Deck
@@ -45,7 +44,10 @@ const mapStateToProps = ({ photos }) => ({ photos })
 
 DeckListContainer.propTypes = {
   fetchPhotos: PropTypes.func.isRequired,
-  photos: PropTypes.arrayOf(PropTypes.object).isRequired
+  photos: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array
+  ]).isRequired
 }
 
 const styles = StyleSheet.create({
@@ -53,12 +55,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  title: {
+  author: {
     marginBottom: 10,
     fontSize: 18,
     color: '#777777',
   },
-  description: {
+  descrition: {
     marginBottom: 10
   }
 })
