@@ -12,7 +12,7 @@ class Deck extends Component {
       // Return false ~> this PanResponder is not responsible for event.
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (e, gesture) => position.setValue({ x: gesture.dx, y: gesture.dy }),
-      onPanResponderRelease: () => { }
+      onPanResponderRelease: () => this.resetCardPosition()
     })
     this.state = { position, panResponder }
   }
@@ -35,36 +35,39 @@ class Deck extends Component {
     }
   }
 
+  resetCardPosition() {
+    Animated.spring(this.state.position, {
+      toValue: { x: 0, y: 0 }
+    }).start()
+  }
+
   renderCards() {
     const { data, renderCard } = this.props
-    return data.map((item, index) =>
+    console.log('data:', data)
+    return data.map((photo, index) =>
       index === 0 ?
         <Animated.View
-          key={item.id}
+          key={photo.id}
           style={this.rotateCard()}
           {...this.state.panResponder.panHandlers}
         >
-          {renderCard(item)}
+          {renderCard(photo)}
         </Animated.View>
-        : renderCard(item)
+        : renderCard(photo)
     )
   }
 
   render() {
     return (
       <View>
-        {this.renderCards()}
+        {this.props.data.length > 0 && this.renderCards()}
       </View>
     )
   }
 }
 
 Deck.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    text: PropTypes.string,
-    uri: PropTypes.string
-  })).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   renderCard: PropTypes.func.isRequired
 }
 
