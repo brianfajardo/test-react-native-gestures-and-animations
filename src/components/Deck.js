@@ -83,18 +83,30 @@ class Deck extends Component {
   }
 
   renderCards() {
-    const { data, renderCard } = this.props
-    return data.map((photo, index) =>
-      index === 0 ?
-        <Animated.View
-          key={photo.id}
-          style={this.rotateCard()}
-          {...this.state.panResponder.panHandlers}
-        >
-          {renderCard(photo)}
-        </Animated.View>
-        : renderCard(photo)
-    )
+    const {
+      data,
+      renderCard,
+      currentCardIndex
+     } = this.props
+    return data.map((photo, index) => {
+      // If cards have already been swiped, return null.
+      // If index matches currentCardIndex, apply Animation
+      // and PanResponder props & handlers.
+      if (index < currentCardIndex) {
+        return null
+      } else if (index === currentCardIndex) {
+        return (
+          <Animated.View
+            key={photo.id}
+            style={this.rotateCard()}
+            {...this.state.panResponder.panHandlers}
+          >
+            {renderCard(photo)}
+          </Animated.View >
+        )
+      }
+      return renderCard(photo)
+    })
   }
 
   render() {
