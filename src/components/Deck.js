@@ -3,7 +3,9 @@ import {
   View,
   PanResponder,
   Animated,
-  Dimensions
+  Dimensions,
+  LayoutAnimation,
+  UIManager
 } from 'react-native'
 import PropTypes from 'prop-types'
 
@@ -35,6 +37,16 @@ class Deck extends Component {
       }
     })
     this.state = { position, panResponder }
+  }
+
+  componentWillUpdate() {
+    // For support with Android devices.
+    UIManager.setLayoutAnimationEnabledExperimental &&
+      UIManager.setLayoutAnimationEnabledExperimental(true)
+    // Whenever this component is updated/re-rendered, it
+    // needs to animate any changes made to the component itself.
+    // In this case, the positioning of the cascading cards.
+    LayoutAnimation.spring()
   }
 
   rotateCard() {
@@ -112,7 +124,10 @@ class Deck extends Component {
         )
       }
       return (
-        <Animated.View key={photo.id} style={styles.cardStyle}>
+        <Animated.View
+          key={photo.id}
+          style={[styles.cardStyle, { top: 10 * (index - currentCardIndex) }]}
+        >
           {renderCard(photo)}
         </Animated.View>
       )
