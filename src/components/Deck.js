@@ -7,6 +7,8 @@ import {
 } from 'react-native'
 import PropTypes from 'prop-types'
 
+import styles from '../../styles/Deck_styles'
+
 // Dynamically setting input range to best match width of user device
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3
@@ -102,15 +104,21 @@ class Deck extends Component {
         return (
           <Animated.View
             key={photo.id}
-            style={this.rotateCard()}
+            style={[this.rotateCard(), styles.cardStyle]}
             {...this.state.panResponder.panHandlers}
           >
             {renderCard(photo)}
           </Animated.View >
         )
       }
-      return renderCard(photo)
-    })
+      return (
+        <Animated.View key={photo.id} style={styles.cardStyle}>
+          {renderCard(photo)}
+        </Animated.View>
+      )
+      // Last element appears on top of stack,
+      // need to reverse .map array of elements.
+    }).reverse()
   }
 
   render() {
@@ -129,7 +137,8 @@ Deck.propTypes = {
   ]).isRequired,
   renderCard: PropTypes.func.isRequired,
   onSwipe: PropTypes.func.isRequired,
-  currentCardIndex: PropTypes.number.isRequired
+  currentCardIndex: PropTypes.number.isRequired,
+  renderEndOfCards: PropTypes.func.isRequired
 }
 
 export default Deck
