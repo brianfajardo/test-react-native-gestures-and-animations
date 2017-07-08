@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text } from 'react-native'
 import { Card } from 'react-native-elements'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
+import styles from '../../styles/DeckListContainer_styles'
 import * as actions from '../actions/'
 import Deck from '../components/Deck'
 
@@ -62,20 +63,5 @@ DeckListContainer.propTypes = {
   onSwipe: PropTypes.func.isRequired,
   currentCardIndex: PropTypes.number.isRequired
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  author: {
-    marginBottom: 10,
-    fontSize: 18,
-    color: '#777777',
-  },
-  descrition: {
-    marginBottom: 10
-  }
-})
 
 export default connect(mapStateToProps, actions)(DeckListContainer)
