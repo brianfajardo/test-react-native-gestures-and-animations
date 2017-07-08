@@ -46,14 +46,16 @@ class DeckListContainer extends Component {
   render() {
     const {
       data,
-      onSwipe,
+      onSwipeLeft,
+      onSwipeRight,
       currentCardIndex,
     } = this.props
     return (
       <View style={styles.container}>
         <Deck
           data={data}
-          onSwipe={onSwipe}
+          onSwipeLeft={onSwipeLeft}
+          onSwipeRight={onSwipeRight}
           renderCard={this.renderCard}
           currentCardIndex={currentCardIndex}
           renderEndOfCards={this.renderEndOfCards}
@@ -74,7 +76,8 @@ DeckListContainer.propTypes = {
     PropTypes.object,
     PropTypes.array
   ]).isRequired,
-  onSwipe: PropTypes.func.isRequired,
+  onSwipeLeft: PropTypes.func.isRequired,
+  onSwipeRight: PropTypes.func.isRequired,
   currentCardIndex: PropTypes.number.isRequired
 }
 

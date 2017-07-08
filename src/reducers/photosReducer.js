@@ -1,8 +1,7 @@
 import {
   FETCH_INIT_PHOTOS,
   FETCH_MORE_PHOTOS,
-  SWIPE_LEFT,
-  SWIPE_RIGHT
+  SWIPE_COMPLETE,
 } from '../constants/actionTypes'
 
 const initialState = {
@@ -23,15 +22,10 @@ export default (state = initialState, action) => {
         data: [...action.payload],
         currentCardIndex: 0
       }
-    case SWIPE_RIGHT:
+    case SWIPE_COMPLETE:
       return {
         ...state,
         currentCardIndex: state.currentCardIndex + 1
-      }
-    case SWIPE_LEFT:
-      return {
-        ...state,
-        currentCardIndex: state.currentCardIndex - 1
       }
     default:
       return state

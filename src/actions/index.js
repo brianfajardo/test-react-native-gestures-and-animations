@@ -3,8 +3,7 @@ import axios from 'axios'
 import {
   FETCH_INIT_PHOTOS,
   FETCH_MORE_PHOTOS,
-  SWIPE_LEFT,
-  SWIPE_RIGHT
+  SWIPE_COMPLETE,
 } from '../constants/actionTypes'
 import UNSPLASH_URL from '../constants/unsplash_url'
 
@@ -25,6 +24,12 @@ export const fetchPhotos = utilization => (dispatch) => {
     })
 }
 
-export const onSwipe = (item, direction) => (dispatch) => {
-  direction === 'right' ? dispatch({ type: SWIPE_RIGHT }) : dispatch({ type: SWIPE_LEFT })
+export const onSwipeRight = item => (dispatch) => {
+  // Do something applicable to app.
+  dispatch({ type: SWIPE_COMPLETE })
+}
+
+export const onSwipeLeft = item => (dispatch) => {
+  // Do something like an HTTP request.
+  dispatch({ type: SWIPE_COMPLETE })
 }

@@ -41,12 +41,29 @@ class Deck extends Component {
 
   componentWillUpdate() {
     // For support with Android devices.
-    UIManager.setLayoutAnimationEnabledExperimental &&
-      UIManager.setLayoutAnimationEnabledExperimental(true)
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
     // Whenever this component is updated/re-rendered, it
     // needs to animate any changes made to the component itself.
     // In this case, the positioning of the cascading cards.
     LayoutAnimation.spring()
+  }
+
+  onSwipeComplete(direction) {
+    const {
+      data,
+      onSwipeLeft,
+      onSwipeRight,
+      currentCardIndex,
+     } = this.props
+    const item = data[currentCardIndex]
+    if (direction === 'right') {
+      onSwipeRight(item)
+    } else if (direction === 'left' && currentCardIndex > 0) {
+      onSwipeLeft(item)
+    } else {
+      this.resetCardPosition()
+    }
+    this.state.position.setValue({ x: 0, y: 0 })
   }
 
   rotateCard() {
@@ -71,23 +88,6 @@ class Deck extends Component {
       toValue: { x, y: 0 },
       duration: FORCE_SWIPE_DURATION
     }).start(() => this.onSwipeComplete(direction))
-  }
-
-  onSwipeComplete(direction) {
-    const {
-      data,
-      onSwipe,
-      currentCardIndex,
-     } = this.props
-    const item = data[currentCardIndex]
-    if (direction === 'right') {
-      onSwipe(item, direction)
-    } else if (direction === 'left' && currentCardIndex > 0) {
-      onSwipe(item, direction)
-    } else {
-      this.resetCardPosition()
-    }
-    this.state.position.setValue({ x: 0, y: 0 })
   }
 
   resetCardPosition() {
@@ -151,7 +151,8 @@ Deck.propTypes = {
     PropTypes.array
   ]).isRequired,
   renderCard: PropTypes.func.isRequired,
-  onSwipe: PropTypes.func.isRequired,
+  onSwipeLeft: PropTypes.func.isRequired,
+  onSwipeRight: PropTypes.func.isRequired,
   currentCardIndex: PropTypes.number.isRequired,
   renderEndOfCards: PropTypes.func.isRequired
 }
