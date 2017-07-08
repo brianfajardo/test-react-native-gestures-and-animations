@@ -11,7 +11,7 @@ import Deck from '../components/Deck'
 class DeckListContainer extends Component {
 
   componentWillMount() {
-    this.props.fetchPhotos()
+    this.props.fetchPhotos('init')
   }
 
   renderCard(photo) {
@@ -35,7 +35,10 @@ class DeckListContainer extends Component {
         <Text style={styles.description}>
           There are no more photos to view in this deck.
           </Text>
-        <Button title="Load more.." />
+        <Button
+          title="Load more.."
+          onPress={() => this.props.fetchPhotos('more')}
+        />
       </Card>
     )
   }

@@ -1,3 +1,4 @@
-export const FETCH_PHOTOS = 'FETCH_PHOTOS'
+export const FETCH_INIT_PHOTOS = 'FETCH_INIT_PHOTOS'
+export const FETCH_MORE_PHOTOS = 'FETCH_MORE_PHOTOS'
 export const SWIPE_RIGHT = 'SWIPE_RIGHT'
 export const SWIPE_LEFT = 'SWIPE_LEFT'
