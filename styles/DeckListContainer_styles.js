@@ -10,7 +10,7 @@ export default StyleSheet.create({
     fontSize: 18,
     color: '#777777',
   },
-  descrition: {
+  description: {
     marginBottom: 10
   }
 })

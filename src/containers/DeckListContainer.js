@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
-import { Card } from 'react-native-elements'
+import { Card, Button } from 'react-native-elements'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -29,13 +29,23 @@ class DeckListContainer extends Component {
     )
   }
 
+  renderEndOfCards() {
+    return (
+      <Card title="Wow! You've hit the end.">
+        <Text style={styles.description}>
+          There are no more photos to view in this deck.
+          </Text>
+        <Button title="Load more.." />
+      </Card>
+    )
+  }
+
   render() {
     const {
       data,
       onSwipe,
       currentCardIndex,
     } = this.props
-    console.log('DeckListContainer props:', this.props)
     return (
       <View style={styles.container}>
         <Deck
@@ -43,6 +53,7 @@ class DeckListContainer extends Component {
           onSwipe={onSwipe}
           renderCard={this.renderCard}
           currentCardIndex={currentCardIndex}
+          renderEndOfCards={this.renderEndOfCards}
         />
       </View>
     )

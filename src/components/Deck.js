@@ -86,8 +86,12 @@ class Deck extends Component {
     const {
       data,
       renderCard,
-      currentCardIndex
-     } = this.props
+      renderEndOfCards,
+      currentCardIndex,
+    } = this.props
+    if (currentCardIndex >= data.length) {
+      return renderEndOfCards()
+    }
     return data.map((photo, index) => {
       // If cards have already been swiped, return null.
       // If index matches currentCardIndex, apply Animation
