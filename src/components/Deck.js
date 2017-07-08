@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
-import { View, PanResponder, Animated, Dimensions } from 'react-native'
+import {
+  View,
+  PanResponder,
+  Animated,
+  Dimensions
+} from 'react-native'
 import PropTypes from 'prop-types'
 
 // Dynamically setting input range to best match width of user device
@@ -55,7 +60,20 @@ class Deck extends Component {
   }
 
   onSwipeComplete(direction) {
-    // Do something
+    const {
+      data,
+      onSwipe,
+      currentCardIndex,
+     } = this.props
+    const item = data[currentCardIndex]
+    if (direction === 'right') {
+      onSwipe(item, direction)
+    } else if (direction === 'left' && currentCardIndex > 0) {
+      onSwipe(item, direction)
+    } else {
+      this.resetCardPosition()
+    }
+    this.state.position.setValue({ x: 0, y: 0 })
   }
 
   resetCardPosition() {
@@ -93,7 +111,9 @@ Deck.propTypes = {
     PropTypes.object,
     PropTypes.array
   ]).isRequired,
-  renderCard: PropTypes.func.isRequired
+  renderCard: PropTypes.func.isRequired,
+  onSwipe: PropTypes.func.isRequired,
+  currentCardIndex: PropTypes.number.isRequired
 }
 
 export default Deck

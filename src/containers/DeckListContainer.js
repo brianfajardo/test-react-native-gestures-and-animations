@@ -4,7 +4,7 @@ import { Card } from 'react-native-elements'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { fetchPhotos } from '../actions/'
+import * as actions from '../actions/'
 import Deck from '../components/Deck'
 
 class DeckListContainer extends Component {
@@ -29,25 +29,38 @@ class DeckListContainer extends Component {
   }
 
   render() {
+    const {
+      data,
+      onSwipe,
+      currentCardIndex,
+    } = this.props
+    console.log('DeckListContainer props:', this.props)
     return (
       <View style={styles.container}>
         <Deck
-          data={this.props.photos}
+          data={data}
+          onSwipe={onSwipe}
           renderCard={this.renderCard}
+          currentCardIndex={currentCardIndex}
         />
       </View>
     )
   }
 }
 
-const mapStateToProps = ({ photos }) => ({ photos })
+const mapStateToProps = ({ photos }) => {
+  const { data, currentCardIndex } = photos
+  return { data, currentCardIndex }
+}
 
 DeckListContainer.propTypes = {
   fetchPhotos: PropTypes.func.isRequired,
-  photos: PropTypes.oneOfType([
+  data: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.array
-  ]).isRequired
+  ]).isRequired,
+  onSwipe: PropTypes.func.isRequired,
+  currentCardIndex: PropTypes.number.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -65,4 +78,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default connect(mapStateToProps, { fetchPhotos })(DeckListContainer)
+export default connect(mapStateToProps, actions)(DeckListContainer)
