@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 
 // Dynamically setting input range to best match width of user device
 const SCREEN_WIDTH = Dimensions.get('window').width
-const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.25
+const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3
+const FORCE_SWIPE_DURATION = 250
 
 class Deck extends Component {
 
@@ -18,11 +19,10 @@ class Deck extends Component {
       onPanResponderMove: (e, gesture) => position.setValue({ x: gesture.dx, y: gesture.dy }),
       onPanResponderRelease: (e, gesture) => {
         if (gesture.dx > SWIPE_THRESHOLD) {
-          console.log('swipe right')
+          this.forceSwipeThrough('right')
         } else if (gesture.dx < -SWIPE_THRESHOLD) {
-          console.log('swipe left')
+          this.forceSwipeThrough('left')
         } else {
-          // User does not hit above thresholds, reset cards position.
           this.resetCardPosition()
         }
       }
@@ -36,7 +36,7 @@ class Deck extends Component {
     // to degrees of rotation (outputRange)
     const rotate = position.x.interpolate({
       inputRange: [-SCREEN_WIDTH, 0, SCREEN_WIDTH],
-      outputRange: ['-50deg', '0deg', '50deg']
+      outputRange: ['-80deg', '0deg', '80deg']
     })
     return {
       ...position.getLayout(),
@@ -46,8 +46,16 @@ class Deck extends Component {
     }
   }
 
-  swipeThreshold() {
+  forceSwipeThrough(direction) {
+    const x = (direction === 'right' ? SCREEN_WIDTH : -SCREEN_WIDTH)
+    Animated.timing(this.state.position, {
+      toValue: { x, y: 0 },
+      duration: FORCE_SWIPE_DURATION
+    }).start(() => this.onSwipeComplete(direction))
+  }
 
+  onSwipeComplete(direction) {
+    // Do something
   }
 
   resetCardPosition() {
